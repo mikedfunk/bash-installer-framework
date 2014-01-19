@@ -95,7 +95,7 @@ function tasks_each() {
 }
 
 # Returns ${TRUE} if a task has been marked to be skipped, ${FALSE} otherwise.
-function task_skip?() {
+function should_skip_task() {
   assert_eq $# 1
   local task=$1
 
@@ -107,7 +107,7 @@ function task_skip?() {
 }
 
 # Returns ${TRUE} if a task has been completed, ${FALSE} otherwise.
-function task_done?() {
+function is_task_done() {
   assert_eq $# 1
   local task=$1
 
@@ -119,7 +119,7 @@ function task_done?() {
 }
 
 # Returns ${TRUE} if a task has been completed or marked to be skipped, ${FALSE} otherwise.
-function task_done_or_skipped?() {
+function is_task_done_or_skipped() {
   assert_eq $# 1
   local task=$1
 
@@ -131,13 +131,13 @@ function task_done_or_skipped?() {
 }
 
 # Returns ${TRUE} if all tasks are done, ${FALSE} otherwise.
-function all_tasks_done?() {
-  tasks_each "task_done_or_skipped?"
+function are_all_tasks_done() {
+  tasks_each "is_task_done_or_skipped"
   return $?
 }
 
 # Returns ${TRUE} if all dependencies of a task are done, ${FALSE} otherwise.
-function all_dependencies_done?() {
+function are_all_dependencies_done() {
   assert_eq $# 1
   local master=$1
 
@@ -165,28 +165,28 @@ function task_status_msg() {
 }
 
 # Set task status to skip.
-function task_skip!() {
+function task_skip() {
   assert_eq $# 1
   local task=$1
   dictSet ${task} "status" ${T_STATUS_SKIP}
 }
 
 # Set task status to not run.
-function task_not_run!() {
+function task_not_run() {
   assert_eq $# 1
   local task=$1
   dictSet ${task} "status" ${T_STATUS_NOT_RUN}
 }
 
 # Set task status to done.
-function task_done!() {
+function task_done() {
   assert_eq $# 1
   local task=$1
   dictSet ${task} "status" ${T_STATUS_DONE}
 }
 
 # Set task status to failure.
-function task_failed!() {
+function task_failed() {
   assert_eq $# 1
   local task=$1
   dictSet ${task} "status" ${T_STATUS_FAILED}
@@ -217,10 +217,10 @@ function skip_unskip_task() {
   assert_eq $# 1
   local task=$1
 
-  if task_skip? ${task}; then
-    task_not_run! ${task}
+  if should_skip_task ${task}; then
+    task_not_run ${task}
   else
-    task_skip! ${task}
+    task_skip ${task}
   fi
   
   return ${E_SUCCESS}
@@ -233,13 +233,13 @@ function run_task() {
   local shortname=$(dictGet ${task} "shortname")
 
   # Check whether task has been marked to be skip.
-  if task_skip? ${task}; then
+  if should_skip_task ${task}; then
     log_task_skip ${task}
     return ${E_SUCCESS}
   fi
 
   # Check whether the dependencies are met.
-  if ! all_dependencies_done? ${task}; then
+  if ! are_all_dependencies_done ${task}; then
     # Ask the user whether he really would like to continue.
     ask "Task ${shortname} has unsatisfied dependencies. Would you really like to run it?"
     if [ $? -eq ${NO} ]; then

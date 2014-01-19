@@ -78,7 +78,7 @@ fi
 function run_installation() {
   tasks_each "run_installation_task"
   
-  if all_tasks_done?; then
+  if are_all_tasks_done; then
     dispatch_msg "installation_complete"
     return ${E_SUCCESS}
   else
@@ -91,7 +91,7 @@ function run_installation_task() {
   local task=$1
 
   # Already completed?
-  if task_done? ${task}; then
+  if is_task_done ${task}; then
     return ${TRUE}
   fi
 
@@ -227,7 +227,7 @@ add_command_line_option "tasks" "tasks" "t" "List of tasks to execute (others wi
 # Read command line arguments.
 log_info "Reading command line arguments..."
 process_command_line_options "$@"
-if [ $? -ne ${E_SUCCESS} ] || has_command_line_switch? "help"; then
+if [ $? -ne ${E_SUCCESS} ] || has_command_line_switch "help"; then
   usage
   exit ${E_FAILURE}
 fi
@@ -238,12 +238,12 @@ if [ $? -ne ${E_SUCCESS} ]; then
   exit ${E_FAILURE}
 fi
 
-if has_command_line_switch? "debug"; then
+if has_command_line_switch "debug"; then
 
   # Debug console.
   enter_debug_console
 
-elif has_command_line_switch? "run"; then
+elif has_command_line_switch "run"; then
 
   # Automatic installation.
   run_installation

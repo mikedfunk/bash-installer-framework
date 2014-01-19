@@ -504,7 +504,7 @@ function get_command_line_option() {
 }
 
 # Check if a command line switch has been given.
-function has_command_line_switch?() {
+function has_command_line_switch() {
   assert_eq $# 1
   local var=$1
   local value=$(dictGet "command_line_option_${var}" "value")

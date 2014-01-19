@@ -183,7 +183,7 @@ function skip_unwanted_tasks() {
 
     # First check if each task is actually known.
     for task in ${tasklist[@]}; do
-      if ! array_contains? ${task} "${TASKS[@]}"; then
+      if ! array_contains ${task} "${TASKS[@]}"; then
         echo "Task ${task} not found." >&2
         echo "Tasks are: ${TASKS[@]}"
         return ${E_FAILURE}
@@ -192,7 +192,7 @@ function skip_unwanted_tasks() {
 
     # Skip unselected tasks.
     for task in ${TASKS[@]}; do
-      if ! array_contains? ${task} "${tasklist[@]}"; then
+      if ! array_contains ${task} "${tasklist[@]}"; then
         skip_unskip_task ${task}
       fi
     done

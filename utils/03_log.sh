@@ -43,7 +43,7 @@ function _color_code() {
   echo "${color}"
 }
 
-function _log_to_stdout?() {
+function _log_to_stdout() {
   assert_eq $# 1
   local severity=$1
   
@@ -67,7 +67,7 @@ function _log() {
   local severity_str=${severity}$(printf '%*.*s' 0 $((${padlength} - ${#severity})) "${pad}")
 
   # Check if we should also log to stdout.
-  if _log_to_stdout? ${severity}; then
+  if _log_to_stdout ${severity}; then
     local uncolor="$(tput sgr0)"
     local color=$(_color_code ${severity})
     echo -e "${color}${severity}: ${msg}${uncolor}"

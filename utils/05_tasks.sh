@@ -256,9 +256,9 @@ function run_task() {
 
   # Update the status.
   if [ ${result} -ne ${E_SUCCESS} ]; then
-    task_failed! ${task}
+    task_failed ${task}
   else
-    task_done! ${task}
+    task_done ${task}
   fi
 
   # Log the result.

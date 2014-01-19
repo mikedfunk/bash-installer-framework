@@ -26,7 +26,7 @@ function dictGet() {
   printf '%s' "${!gvar}"
 }
 
-function dictIsSet?() {
+function dictIsSet() {
   assert_eq $# 2
   local dict=$1 key=$2
   local gvar="${dict}_${key}"

@@ -142,7 +142,7 @@ function all_dependencies_done?() {
   local master=$1
 
   # Does the task specify any dependencies?
-  if ! dictIsSet? ${master} "dependencies"; then
+  if ! dictIsSet ${master} "dependencies"; then
     return ${TRUE}
   fi
 

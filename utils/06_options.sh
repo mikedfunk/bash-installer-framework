@@ -5,7 +5,7 @@
 # (c) by Aron Griffis
 # https://github.com/agriffis/pure-getopt
 
-getopt() {
+getopt_new() {
   # pure-getopt, a drop-in replacement for GNU getopt in pure Bash.
   # version 1.4
   #
@@ -542,8 +542,6 @@ function process_command_line_options() {
   local argv="$@" so=$(_short_options) lo=$(_long_options)
 
   declare opts
-  echo "getopt -n install.sh -o ${so} -l ${lo} -- ${argv}"
-exit;
   opts=$(getopt -n "install.sh" -o "${so}" -l "${lo}" -- "${argv}")
 
   # Bad arguments?

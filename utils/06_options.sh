@@ -542,7 +542,7 @@ function process_command_line_options() {
   local argv="$@" so=$(_short_options) lo=$(_long_options)
 
   declare opts
-  opts=$(getopt -n "install.sh" -o "${so}" -l "${lo}" -- "${argv}")
+  opts=$(getopt_new -n "install.sh" -o "${so}" -l "${lo}" -- "${argv}")
 
   # Bad arguments?
   if [ $? -ne 0 ]; then
